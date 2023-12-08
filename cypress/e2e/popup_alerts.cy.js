@@ -3,6 +3,8 @@ describe('Lidando com Popups e Alerts', () => {
   beforeEach(() => {
     cy.visit('/Popup-Alerts/index.html')
   });
+
+  //Gleb has refactored this code
   it('Javascript Alert', () => {
     cy.get('#button1')
       .click()
@@ -27,7 +29,7 @@ describe('Lidando com Popups e Alerts', () => {
       .click()
   })
 
-  // Gleb has refactored this code. 
+  // Gleb has refactored this code. Don't write code like that
   it('Outra maneira para o Modal Popup', () => {
     cy.intercept('/**').as('googleAnalytics');
     cy.get('p > a')
@@ -51,7 +53,7 @@ describe('Lidando com Popups e Alerts', () => {
 
 
   // I have never done it like this before
-  it.only('Javascript ConfirmBox - Pressing Cancel', () => {
+  it('Javascript ConfirmBox - Pressing Cancel', () => {
     cy.window().then((win) => {
       cy.stub(win, 'confirm').returns(false);
     });
@@ -70,16 +72,20 @@ describe('Lidando com Popups e Alerts', () => {
 
 
   // I have always done it this way
-  it.only('Javascript ConfirmBox - Pressing Cancel - That is the way I have been doing', () => {
+  it('Javascript ConfirmBox - Pressing Cancel - That is the way I have been doing', () => {
     cy.get('#button4').click()
     cy.on('window:confirm', () => false)
+
+    cy.on('window:confirm', (text) => {
+      expect(text).to.contains('Press a button!')
+    })
     
     const txtConfirm = 'You pressed Cancel!'
     cy.contains('#confirm-alert-text', txtConfirm).should('be.visible')
   })
 
   // I have always done it this way
-  it.only('Javascript ConfirmBox - Accepting', () => {
+  it('Javascript ConfirmBox - Accepting', () => {
     cy.get('#button4').click()
     cy.on('window:confirm', (text) => {
       expect(text).to.contains('Press a button!')
